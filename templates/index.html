@@ -7,124 +7,68 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
-        
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
             height: 100vh; display: flex; align-items: center; justify-content: center;
         }
-
         .container {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            width: 320px; padding: 40px 30px;
-            border-radius: 40px;
-            /* Border Line हटाइएको छ */
-            border: none; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            text-align: center;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            width: 320px; padding: 40px 25px; border-radius: 45px;
+            border: none; box-shadow: 0 25px 50px rgba(0,0,0,0.07); text-align: center;
         }
-
-        h2 { font-size: 22px; font-weight: 700; color: #1d1d1f; margin-bottom: 8px; }
+        h2 { font-size: 22px; font-weight: 700; color: #1d1d1f; margin-bottom: 5px; }
         p { font-size: 11px; color: #86868b; margin-bottom: 30px; letter-spacing: 1px; }
-        
         .input-box {
-            width: 100%; padding: 18px; border-radius: 18px;
-            /* Input को पनि border हटाएर shadow हालिएको छ */
-            border: none; 
-            background: rgba(255, 255, 255, 0.8);
-            font-size: 16px; outline: none; text-align: center;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            transition: 0.3s ease;
+            width: 100%; padding: 18px; border-radius: 20px; border: none;
+            background: rgba(255, 255, 255, 0.8); font-size: 16px; outline: none;
+            text-align: center; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
-
-        .input-box:focus {
-            background: #fff;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-        }
-
         .send-btn {
-            width: 100%; padding: 16px; border-radius: 18px;
-            border: none; background: #007AFF; color: #fff;
-            font-size: 16px; font-weight: 600; cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,122,255,0.3);
-            transition: all 0.3s ease;
+            width: 100%; padding: 16px; border-radius: 20px; border: none;
+            background: #007AFF; color: #fff; font-size: 16px; font-weight: 600;
+            cursor: pointer; box-shadow: 0 10px 25px rgba(0,122,255,0.3); transition: 0.3s;
         }
-
-        .send-btn:active { transform: scale(0.96); opacity: 0.9; }
-        .send-btn:disabled { background: #aeaeb2; box-shadow: none; }
-
-        .footer { margin-top: 25px; font-size: 10px; color: #86868b; font-weight: 500; }
+        .send-btn:active { transform: scale(0.95); opacity: 0.9; }
+        .footer { margin-top: 30px; font-size: 10px; color: #86868b; font-weight: 600; }
     </style>
 </head>
 <body>
-
     <div class="container">
         <h2>REQUEST SPAM</h2>
-        <p>CKR UNKNOWN BULK TOOL</p>
-
+        <p>CKR UNKNOWN OFFICIAL</p>
         <input type="text" id="target_uid" class="input-box" placeholder="Target UID" autocomplete="off">
-        
         <button id="mainBtn" class="send-btn" onclick="startSpam()">SEND REQUESTS</button>
-
-        <div class="footer">BY MAHENDRA SUNAR</div>
+        <div class="footer">MAHENDRA SUNAR • 2026</div>
     </div>
 
     <script>
         async function startSpam() {
             const uid = document.getElementById('target_uid').value;
             const btn = document.getElementById('mainBtn');
-
             if(!uid) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Empty UID',
-                    text: 'Please enter target UID first!',
-                    confirmButtonColor: '#007AFF',
-                    background: 'rgba(255, 255, 255, 0.9)',
-                    backdrop: `blur(10px)`
-                });
+                Swal.fire({ icon: 'warning', title: 'Empty!', text: 'Please enter a UID', confirmButtonColor: '#007AFF' });
                 return;
             }
-
-            btn.disabled = true;
-            btn.innerText = "Sending...";
-
-            // Apple Style Loading Popup
-            Swal.fire({
-                title: 'Processing...',
-                text: 'Connecting to accounts',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                background: 'rgba(255, 255, 255, 0.9)',
-                didOpen: () => { Swal.showLoading() }
-            });
+            btn.disabled = true; btn.innerText = "Processing...";
+            Swal.fire({ title: 'Sending...', text: 'Processing bulk.txt accounts', allowOutsideClick: false, didOpen: () => { Swal.showLoading() }});
 
             try {
-                const res = await fetch('/spam', {
+                const response = await fetch(window.location.origin + '/spam', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({target: uid})
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ target: uid })
                 });
-                const data = await res.json();
-
-                if(res.ok) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Completed',
-                        text: `Requests Sent: ${data.success} / ${data.total}`,
-                        confirmButtonColor: '#007AFF',
-                        background: 'rgba(255, 255, 255, 0.9)'
-                    });
+                const result = await response.json();
+                if (response.ok) {
+                    Swal.fire({ icon: 'success', title: 'Done!', text: `Sent: ${result.success} / ${result.total}`, confirmButtonColor: '#007AFF' });
                 } else {
-                    Swal.fire({ icon: 'error', title: 'Fail', text: data.error });
+                    Swal.fire({ icon: 'error', title: 'Error', text: result.error });
                 }
-            } catch (e) {
-                Swal.fire({ icon: 'error', title: 'Network Error', text: 'Server busy or down!' });
+            } catch (err) {
+                Swal.fire({ icon: 'error', title: 'Connection Error', text: 'Server is not responding. Try again!' });
             } finally {
-                btn.disabled = false;
-                btn.innerText = "SEND REQUESTS";
+                btn.disabled = false; btn.innerText = "SEND REQUESTS";
             }
         }
     </script>
