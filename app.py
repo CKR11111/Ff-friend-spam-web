@@ -8,27 +8,25 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# NEW WORKING API
+# API CONFIG
 FRIEND_API = "https://free-fire-add-friend-api-and-other.onrender.com/add_friend"
 
 def run_spam_in_background(accs, target):
     async def process():
-        # १० वटा कनेक्सन एकैपटक जाने गरी सेट गरिएको
-        connector = aiohttp.TCPConnector(limit=10)
+        connector = aiohttp.TCPConnector(limit=100, ssl=False)
         async with aiohttp.ClientSession(connector=connector) as session:
-            for i in range(0, len(accs), 5):
-                batch = accs[i:i+5]
+            # ५०-५० वटा रिक्वेस्टको ब्याच बनाएर एकैपटक प्रहार गर्ने
+            for i in range(0, len(accs), 50):
+                batch = accs[i:i+50]
                 tasks = []
                 for line in batch:
                     try:
                         u, p = line.split("|")
-                        # target = player_id, u = uid, p = password
                         url = f"{FRIEND_API}?player_id={target}&uid={u}&password={p}"
-                        tasks.append(session.get(url, timeout=12))
+                        tasks.append(session.get(url, timeout=10))
                     except: continue
-                
                 await asyncio.gather(*tasks, return_exceptions=True)
-                await asyncio.sleep(0.4) # API जोगाउन सानो ग्याप
+                await asyncio.sleep(0.01)
 
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
@@ -43,19 +41,14 @@ def start_spam():
     try:
         data = request.get_json()
         target = data.get('target')
-        
         if not os.path.exists("bulk.txt"):
             return jsonify({"error": "bulk.txt file missing"}), 404
-        
         with open("bulk.txt", "r") as f:
             accs = [l.strip() for l in f if "|" in l and l.strip()]
-
         if not accs:
-            return jsonify({"error": "No accounts found in bulk.txt"}), 400
+            return jsonify({"error": "No accounts found"}), 400
 
-        # थ्रेडमा रन गर्ने (ताकि वेबसाइट अड्किदैन)
         threading.Thread(target=run_spam_in_background, args=(accs, target)).start()
-
         return jsonify({"status": "success", "total": len(accs)})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
