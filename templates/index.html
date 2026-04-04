@@ -3,75 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CKR REQUEST SPAM</title>
+    <title>CKR PRO - DARK EDITION</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        :root {
+            --bg-color: #080808;
+            --card-bg: rgba(20, 20, 20, 0.8);
+            --accent: #ffffff; /* Premium White on Black */
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
+        
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            height: 100vh; display: flex; align-items: center; justify-content: center;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #080808 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
         }
-        .container {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            width: 320px; padding: 45px 30px; border-radius: 40px;
-            border: none; box-shadow: 0 20px 40px rgba(0,0,0,0.08); text-align: center;
+
+        .iphone-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            width: 330px;
+            padding: 40px 25px;
+            border-radius: 40px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            text-align: center;
         }
-        h2 { font-size: 22px; font-weight: 700; color: #1d1d1f; margin-bottom: 8px; }
-        p { font-size: 11px; color: #86868b; margin-bottom: 30px; letter-spacing: 1px; }
-        .input-box {
-            width: 100%; padding: 18px; border-radius: 18px; border: none;
-            background: rgba(255, 255, 255, 0.8); font-size: 16px; outline: none;
-            text-align: center; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+
+        h1 { font-size: 22px; font-weight: 600; margin-bottom: 5px; letter-spacing: 1px; }
+        .sub-text { font-size: 11px; color: #666; text-transform: uppercase; margin-bottom: 30px; }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+            outline: none;
+            transition: 0.3s;
         }
-        .send-btn {
-            width: 100%; padding: 16px; border-radius: 18px; border: none;
-            background: #007AFF; color: #fff; font-size: 16px; font-weight: 600;
-            cursor: pointer; box-shadow: 0 10px 20px rgba(0,122,255,0.3); transition: 0.3s;
+
+        input:focus { border-color: #444; background: rgba(255,255,255,0.1); }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .send-btn:active { transform: scale(0.96); opacity: 0.9; }
-        .footer { margin-top: 25px; font-size: 10px; color: #86868b; font-weight: 500; }
+
+        button:active { transform: scale(0.97); }
+
+        /* MINIMAL TERMINAL */
+        .terminal {
+            margin-top: 25px;
+            background: #000;
+            border-radius: 15px;
+            padding: 15px;
+            height: 130px;
+            border: 1px solid #1a1a1a;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+        }
+
+        .term-line {
+            font-size: 10px;
+            color: #00ff00;
+            text-align: left;
+            margin-bottom: 4px;
+            opacity: 0.8;
+        }
+
+        .footer { margin-top: 25px; font-size: 10px; color: #444; font-weight: 600; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>REQUEST SPAM</h2>
-        <p>CKR UNKNOWN OFFICIAL</p>
-        <input type="text" id="target_uid" class="input-box" placeholder="Target UID" autocomplete="off">
-        <button id="mainBtn" class="send-btn" onclick="startSpam()">SEND REQUESTS</button>
-        <div class="footer">BY MAHENDRA SUNAR</div>
+
+    <div class="iphone-container">
+        <h1>CKR UNKNOWN</h1>
+        <div class="sub-text">Ultimate Request Bot</div>
+
+        <input type="number" id="target_id" placeholder="Enter Player ID">
+        <button id="btn" onclick="startAction()">RUN SYSTEM</button>
+
+        <div class="terminal" id="term">
+            <div class="term-line">> Initializing v4.0...</div>
+            <div class="term-line">> Ready for input...</div>
+        </div>
+
+        <div class="footer">DEVELOPED BY MAHENDRA SUNAR</div>
     </div>
 
     <script>
-        async function startSpam() {
-            const uid = document.getElementById('target_uid').value;
-            const btn = document.getElementById('mainBtn');
-            if(!uid) return Swal.fire({ icon: 'warning', title: 'Empty UID', text: 'Please enter target UID' });
+        function addLog(text) {
+            const term = document.getElementById('term');
+            const div = document.createElement('div');
+            div.className = 'term-line';
+            div.innerHTML = `> ${text}`;
+            term.prepend(div);
+            if(term.childNodes.length > 7) term.lastChild.remove();
+        }
 
-            btn.disabled = true; btn.innerText = "Starting...";
+        async function startAction() {
+            const tid = document.getElementById('target_id').value;
+            const btn = document.getElementById('btn');
+
+            if(!tid) return Swal.fire({icon: 'info', title: 'Wait', text: 'Enter target ID', background: '#111', color: '#fff'});
+
+            btn.disabled = true;
+            btn.innerText = "RUNNING...";
+            addLog(`Target: ${tid} confirmed.`);
+            addLog(`Injecting requests...`);
 
             try {
-                const response = await fetch(window.location.origin + '/spam', {
+                const res = await fetch('/spam', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ target: uid })
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({target: tid})
                 });
-                const result = await response.json();
+                const data = await res.json();
 
-                if (response.ok) {
+                if(res.ok) {
+                    addLog(`Successfully queued ${data.total} IDs.`);
                     Swal.fire({
-                        icon: 'success',
-                        title: 'Process Started!',
-                        text: `Request spam started for ${result.total} accounts in background.`,
-                        confirmButtonColor: '#007AFF'
+                        icon: 'success', 
+                        title: 'SUCCESS', 
+                        text: 'Process started in terminal mode.',
+                        background: '#111',
+                        color: '#fff',
+                        showConfirmButton: false,
+                        timer: 1500
                     });
                 } else {
-                    Swal.fire({ icon: 'error', title: 'Error', text: result.error });
+                    addLog(`Error: ${data.error}`);
                 }
-            } catch (err) {
-                Swal.fire({ icon: 'error', title: 'Failed', text: 'Server is waking up, wait 10s and try again.' });
+            } catch (e) {
+                addLog(`Connection error!`);
             } finally {
-                btn.disabled = false; btn.innerText = "SEND REQUESTS";
+                btn.disabled = false;
+                btn.innerText = "RUN SYSTEM";
             }
         }
     </script>
