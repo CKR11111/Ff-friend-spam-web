@@ -3,138 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CKR PRO - VISIT + REQUEST</title>
+    <title>CKR PRO</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        :root {
-            --gold: #ffd700;
-            --deep-blue: #0a0e1a;
-            --glass: rgba(255, 255, 255, 0.05);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+        
         body {
-            background: var(--deep-blue);
-            background-image: radial-gradient(circle at top right, #1a2a4a, #050810);
+            background: #000;
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            overflow: hidden;
         }
 
-        .iphone-card {
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            width: 340px;
-            padding: 45px 25px;
-            border-radius: 45px;
-            border: 1px solid rgba(255, 215, 0, 0.15);
+        .glass-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            width: 310px;
+            padding: 40px 25px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
         }
 
-        h1 { font-size: 26px; color: var(--gold); letter-spacing: 2px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
-        .banner-text { font-size: 10px; color: #aaa; letter-spacing: 3px; margin-bottom: 35px; font-weight: 600; }
-
-        .input-wrapper {
-            background: rgba(0,0,0,0.5);
-            border: 1px solid #222;
-            padding: 18px;
-            border-radius: 20px;
-            margin-bottom: 25px;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
-        }
+        h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 5px; }
+        .spam-text { font-size: 10px; color: #888; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 30px; }
 
         input {
             width: 100%;
-            background: transparent;
-            border: none;
-            color: white;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            color: #fff;
             text-align: center;
-            font-size: 18px;
+            font-size: 16px;
+            margin-bottom: 20px;
             outline: none;
-            font-weight: 500;
         }
 
         button {
             width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #d4af37, #ffd700);
-            border: none;
-            border-radius: 20px;
+            padding: 16px;
+            background: #fff;
             color: #000;
-            font-weight: 800;
+            border: none;
+            border-radius: 18px;
+            font-weight: 700;
             font-size: 14px;
             cursor: pointer;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            text-transform: uppercase;
-            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+            transition: 0.2s;
         }
 
-        button:active { transform: scale(0.95); opacity: 0.8; }
+        button:active { transform: scale(0.96); opacity: 0.8; }
 
-        /* TERMINAL LOGS */
-        .terminal-box {
-            margin-top: 30px;
-            background: rgba(0,0,0,0.7);
-            border-radius: 18px;
-            padding: 15px;
-            height: 110px;
-            border: 1px solid rgba(255,215,0,0.1);
-            font-family: 'Courier New', monospace;
+        /* SIMPLE TERMINAL */
+        .term {
+            margin-top: 25px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 15px;
+            padding: 12px;
+            height: 80px;
+            font-family: monospace;
+            font-size: 10px;
             text-align: left;
+            border: 1px solid rgba(255,255,255,0.05);
             overflow: hidden;
         }
+        .log { color: #00ff00; opacity: 0.8; margin-bottom: 4px; }
 
-        .t-line { font-size: 10px; color: #ffd700; margin-bottom: 5px; opacity: 0.8; }
-
-        .footer { margin-top: 25px; font-size: 10px; color: #444; font-weight: bold; letter-spacing: 1px; }
+        .footer { margin-top: 25px; font-size: 10px; color: #444; font-weight: 600; }
     </style>
 </head>
 <body>
 
-    <div class="iphone-card">
+    <div class="glass-container">
         <h1>CKR PRO</h1>
-        <div class="banner-text">VISIT + REQUEST SPAM</div>
+        <div class="spam-text">REQUEST SPAM</div>
 
-        <div class="input-wrapper">
-            <input type="number" id="target_id" placeholder="ENTER PLAYER ID">
+        <input type="number" id="target_id" placeholder="Target Player ID">
+        <button id="btn" onclick="start()">Execute Attack</button>
+
+        <div class="term" id="term">
+            <div class="log">> System Ready...</div>
         </div>
 
-        <button id="btn" onclick="startSpam()">EXECUTE ATTACK</button>
-
-        <div class="terminal-box" id="terminal">
-            <div class="t-line">> System Initialized...</div>
-            <div class="t-line">> Engine: Ultra-Fast Mode...</div>
-        </div>
-
-        <div class="footer">OWNER: MAHENDRA SUNAR</div>
+        <div class="footer">BY MAHENDRA SUNAR</div>
     </div>
 
     <script>
-        function log(msg) {
-            const term = document.getElementById('terminal');
+        function addLog(msg) {
+            const term = document.getElementById('term');
             const div = document.createElement('div');
-            div.className = 't-line';
+            div.className = 'log';
             div.innerHTML = `> ${msg}`;
             term.prepend(div);
-            if(term.childNodes.length > 6) term.lastChild.remove();
+            if(term.childNodes.length > 4) term.lastChild.remove();
         }
 
-        async function startSpam() {
+        async function start() {
             const tid = document.getElementById('target_id').value;
             const btn = document.getElementById('btn');
 
-            if(!tid) return Swal.fire({icon: 'error', title: 'Error', text: 'Enter Target UID', background: '#0a0e1a', color: '#ffd700'});
+            if(!tid) return Swal.fire({ icon: 'error', title: 'Error', text: 'Enter Player ID', background: '#111', color: '#fff' });
 
-            btn.disabled = true; btn.innerText = "ATTACKING...";
-            log(`Target Locked: ${tid}`);
-            log(`Deploying Fast-Packets (50 req/s)...`);
+            btn.disabled = true; btn.innerText = "Running...";
+            addLog(`Target: ${tid} Locked.`);
 
             try {
                 const res = await fetch('/spam', {
@@ -145,23 +122,15 @@
                 const data = await res.json();
 
                 if(res.ok) {
-                    log(`Success: ${data.total} Accs Processing.`);
-                    Swal.fire({ 
-                        icon: 'success', 
-                        title: 'CKR UNKNOWN', 
-                        text: 'Attack Running in Background', 
-                        background: '#0a0e1a', 
-                        color: '#ffd700', 
-                        showConfirmButton: false, 
-                        timer: 2000 
-                    });
+                    addLog(`Success: ${data.total} IDs Sent.`);
+                    Swal.fire({ icon: 'success', title: 'Started', text: 'Attack running in background', background: '#111', color: '#fff', timer: 1500, showConfirmButton: false });
                 } else {
-                    log(`Error: ${data.error}`);
+                    addLog(`Error: ${data.error}`);
                 }
             } catch (e) {
-                log(`Server Connection Timed Out!`);
+                addLog(`Connection Error!`);
             } finally {
-                btn.disabled = false; btn.innerText = "EXECUTE ATTACK";
+                btn.disabled = false; btn.innerText = "Execute Attack";
             }
         }
     </script>
